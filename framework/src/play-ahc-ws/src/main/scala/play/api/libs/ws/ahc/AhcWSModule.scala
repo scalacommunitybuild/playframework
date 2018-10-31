@@ -12,7 +12,6 @@ import javax.cache.{ CacheManager, Caching, Cache => JCache }
 import javax.inject.{ Inject, Provider, Singleton }
 import akka.stream.Materializer
 import com.typesafe.sslconfig.ssl.SystemConfiguration
-import com.typesafe.sslconfig.ssl.debug.DebugConfiguration
 import play.api.inject.{ ApplicationLifecycle, SimpleModule, bind }
 import play.api.libs.ws._
 import play.api.libs.ws.ahc.cache._
@@ -67,9 +66,6 @@ class AsyncHttpClientProvider @Inject() (
     // JSSE depends on various system properties which must be set before JSSE classes
     // are pulled into memory, so these must come first.
     val loggerFactory = StandaloneAhcWSClient.loggerFactory
-    if (wsClientConfig.ssl.debug.enabled) {
-      new DebugConfiguration(loggerFactory).configure(wsClientConfig.ssl.debug)
-    }
     new SystemConfiguration(loggerFactory).configure(wsClientConfig.ssl)
   }
 
